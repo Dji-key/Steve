@@ -1,6 +1,9 @@
 package com.epam.javacore2019.command;
 
-import com.epam.javacore2019.Info;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class CommandAbout extends ACommand {
 
@@ -11,6 +14,17 @@ public class CommandAbout extends ACommand {
 
     @Override
     public void execute() {
-        System.out.println("Version: " + Info.VERSION + "\nAuthor: " + Info.AUTHOR);
+
+        Properties properties = new Properties();
+        String fileName = "application.properties";
+
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(fileName)){
+
+            properties.load(input);
+            System.out.println("Version: " + properties.getProperty("version") + "\nAuthor: " + properties.getProperty("author"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
