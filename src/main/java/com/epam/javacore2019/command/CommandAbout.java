@@ -1,5 +1,7 @@
 package com.epam.javacore2019.command;
 
+import com.epam.javacore2019.util.Trigger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -9,8 +11,10 @@ import java.util.Properties;
  */
 public class CommandAbout extends ACommand {
 
-    CommandAbout(String name) {
-        super(name);
+    public static final Trigger trigger = new Trigger("about", "father", "author");
+    public static final String[] params = null;
+
+    CommandAbout() {
         description = "Information about program";
     }
 
@@ -18,7 +22,7 @@ public class CommandAbout extends ACommand {
      * Loads information from properties and prints out
      */
     @Override
-    public void execute() {
+    public void execute(String... params) {
 
         Properties properties = new Properties();
         String fileName = "application.properties";

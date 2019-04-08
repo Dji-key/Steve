@@ -1,5 +1,6 @@
 package com.epam.javacore2019.command;
 
+import com.epam.javacore2019.util.Trigger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,13 +12,15 @@ import java.util.Properties;
 
 public class CommandWeather extends ACommand {
 
-    CommandWeather(String name) {
-        super(name);
+    public static final Trigger trigger = new Trigger("weather", "temp", "temperature");
+    public static final String[] params = new String[] {"yesterday", "today", "tomorrow"};
+
+    CommandWeather() {
         description = "Show temp of some day and my opinion";
     }
 
     @Override
-    public void execute() {
+    public void execute(String... params) {
 
         Properties properties = new Properties();
         String fileName = "application.properties";
