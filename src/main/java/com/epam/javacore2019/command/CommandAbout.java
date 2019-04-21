@@ -11,18 +11,21 @@ import java.util.Properties;
  */
 public class CommandAbout extends ACommand {
 
-    public static final Trigger trigger = new Trigger("about", "father", "author");
-    public static final String[] params = null;
+    private final Trigger TRIGGER = new Trigger("about", null, "father", "author");
 
     CommandAbout() {
         description = "Information about program";
     }
 
+    @Override
+    public Trigger getTrigger() {
+        return TRIGGER;
+    }
     /**
      * Loads information from properties and prints out
      */
     @Override
-    public void execute(String... params) {
+    public void execute(String param) {
 
         Properties properties = new Properties();
         String fileName = "application.properties";

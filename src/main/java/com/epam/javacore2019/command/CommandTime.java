@@ -10,15 +10,19 @@ import java.util.Calendar;
  */
 public class CommandTime extends ACommand {
 
-    public static final Trigger trigger = new Trigger("time");
-    public static final String[] params = null;
+    private final Trigger TRIGGER = new Trigger("time", null, null);
 
     CommandTime() {
         description = "Shows current time";
     }
 
     @Override
-    public void execute(String... params) {
+    public Trigger getTrigger() {
+        return TRIGGER;
+    }
+
+    @Override
+    public void execute(String param) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         SimpleDateFormat dateFormatAmPm = new SimpleDateFormat("h:mm:ss a");
         Calendar calendar = Calendar.getInstance();

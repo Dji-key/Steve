@@ -8,10 +8,12 @@ import java.util.Objects;
 public class Trigger {
 
     private String key;
+    private String[] params;
     private String[] words;
 
-    public Trigger(String key, String... words) {
+    public Trigger(String key, String[] params, String... words) {
         this.key = key;
+        this.params = params;
         this.words = words;
     }
 
@@ -20,9 +22,20 @@ public class Trigger {
     }
 
     public String[] getWords() {
-        return words.clone();
+        if (words == null) {
+            return null;
+        } else {
+            return words.clone();
+        }
     }
 
+    public String[] getParams() {
+        if (params == null) {
+            return null;
+        } else {
+            return params.clone();
+        }
+    }
 
 
     @Override

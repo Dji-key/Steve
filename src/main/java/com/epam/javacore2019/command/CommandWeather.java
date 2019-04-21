@@ -12,15 +12,19 @@ import java.util.Properties;
 
 public class CommandWeather extends ACommand {
 
-    public static final Trigger trigger = new Trigger("weather", "temp", "temperature");
-    public static final String[] params = new String[] {"yesterday", "today", "tomorrow"};
+    private final Trigger TRIGGER = new Trigger("weather", new String[]{"yesterday", "today", "tomorrow"}, "temp", "temperature");
 
     CommandWeather() {
         description = "Show temp of some day and my opinion";
     }
 
     @Override
-    public void execute(String... params) {
+    public Trigger getTrigger() {
+        return TRIGGER;
+    }
+
+    @Override
+    public void execute(String param) {
 
         Properties properties = new Properties();
         String fileName = "application.properties";

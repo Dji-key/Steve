@@ -1,6 +1,10 @@
 package com.epam.javacore2019.command;
 
+import com.epam.javacore2019.util.Trigger;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -8,26 +12,38 @@ import java.util.Map;
  */
 public enum  CommandRegister {
     INSTANCE;
-    private final Map<String, ACommand> REGISTER = new HashMap<String, ACommand>(){
+    public final Map<String, ACommand> REGISTER = new HashMap<String, ACommand>(){
         {
-            put(CommandAbout.trigger.getKey(), new CommandAbout());
-            put(CommandTime.trigger.getKey(), new CommandTime());
-            put(CommandWeather.trigger.getKey(), new CommandWeather());
+            CommandAbout about = new CommandAbout();
+            put(about.getTrigger().getKey(), about);
+
+            CommandTime time = new CommandTime();
+            put(time.getTrigger().getKey(), time);
+
+            CommandWeather weather = new CommandWeather();
+            put(weather.getTrigger().getKey(), weather);
         }
     };
 
+    public List<Trigger> getTriggers() {
+        List<Trigger> result = new ArrayList<>();
+        for (ACommand command : REGISTER.values()) {
+            result.add(command.getTrigger());
+        }
+        return result;
+    }
     /**
      * invokes overridden method of {@link ACommand} if any, otherwise prints "No such command"
      * @param commandName get it from {@link com.epam.javacore2019.Application}
      */
-    public void execute(String commandName, String... params) {
+    public void execute(String commandName, String param) {
         if (commandName == null) {
             System.out.println("No such command");
             return;
         }
 
         if (REGISTER.containsKey(commandName)) {
-            REGISTER.get(commandName).execute(params);
+            REGISTER.get(commandName).execute(param);
         } else {
             System.out.println("No such command");
         }

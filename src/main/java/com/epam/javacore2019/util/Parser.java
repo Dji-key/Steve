@@ -1,43 +1,68 @@
 package com.epam.javacore2019.util;
 
-import java.util.Map;
+import com.epam.javacore2019.command.CommandRegister;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class Parser {
 
-    private static Map<Trigger, String[]> names = NameRegister.INSTANCE.REGISTER;
+    private List<Trigger> triggers;
+
+    {
+        triggers = CommandRegister.INSTANCE.getTriggers();
+    }
 
     /**
      * Parses typed string
-     * @param input string from console
-     * @return array of 2 words: found key of command if exist [0] and found parameter if exist [1] otherwise - null.
+     * @param commandRequest string from console
+     * @return List of arrays of strings with found command and parameters.
      */
-    public static String[] parseString(String input) {
-        String[] result = new String[] {null, null};
-        for (Map.Entry<Trigger, String[]> entry : names.entrySet()) {
-            Trigger trigger = entry.getKey();
+    List<String[]> parseString(String commandRequest) {
+        String input = commandRequest.toLowerCase();
+        List<String[]> result = new ArrayList<>();
+
+        Iterator<Trigger> iterator = triggers.iterator();
+        while (iterator.hasNext()){
+            Trigger trigger = iterator.next();
+            boolean found = false;
+            String[] command = new String[]{null, null};
+
             if (input.contains(trigger.getKey())) {
-                result[0] = trigger.getKey();
+                found = true;
+                command[0] = trigger.getKey();
             } else {
-                String[] words = trigger.getWords();
-                for (String word : words) {
-                    if (input.contains(word)) {
-                        result[0] = trigger.getKey();
+                if (trigger.getWords() != null) {
+                    for (String word : trigger.getWords()) {
+                        if (input.contains(word)) {
+                            found = true;
+                            command[0] = trigger.getKey();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (found && trigger.getParams() != null) {
+                for (String param : trigger.getParams()) {
+                    if (input.contains(param)) {
+                        command[1] = param;
                         break;
                     }
                 }
             }
-            if (result[0] != null && entry.getValue() != null) {
-                String[] params = entry.getValue();
-                for (String param : params) {
-                    if (input.contains(param)) {
-                        result[1] = param;
-                        return result;
-                    }
-                }
-                return result;
+
+            if (command[0] != null) {
+                result.add(command);
             }
         }
-        return result;
+
+        if (result.size() == 0) {
+            return null;
+        } else {
+            return result;
+        }
     }
 }
