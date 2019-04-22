@@ -3,8 +3,6 @@ package com.epam.javacore2019.state;
 import com.epam.javacore2019.command.CommandRegister;
 import com.epam.javacore2019.util.Analyzer;
 
-import java.util.Arrays;
-
 public class StateIdle implements AppState {
 
     private Analyzer analyzer = new Analyzer();
