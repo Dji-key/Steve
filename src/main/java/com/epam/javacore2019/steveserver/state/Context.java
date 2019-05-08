@@ -1,6 +1,8 @@
-package com.epam.javacore2019.state;
+package com.epam.javacore2019.steveserver.state;
 
-public class Context {
+public enum  Context {
+    INSTANCE;
+
      private AppState state;
 
     {

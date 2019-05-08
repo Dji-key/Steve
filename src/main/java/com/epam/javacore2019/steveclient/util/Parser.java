@@ -1,9 +1,6 @@
-package com.epam.javacore2019.util;
-
-import com.epam.javacore2019.command.CommandRegister;
+package com.epam.javacore2019.steveclient.util;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -11,8 +8,8 @@ public class Parser {
 
     private List<Trigger> triggers;
 
-    {
-        triggers = CommandRegister.INSTANCE.getTriggers();
+    public Parser (List<Trigger> triggers) {
+        this.triggers = triggers;
     }
 
     /**
@@ -20,13 +17,11 @@ public class Parser {
      * @param commandRequest string from console
      * @return List of arrays of strings with found command and parameters.
      */
-    List<String[]> parseString(String commandRequest) {
+     List<String[]> parseString(String commandRequest) {
         String input = commandRequest.toLowerCase();
         List<String[]> result = new ArrayList<>();
 
-        Iterator<Trigger> iterator = triggers.iterator();
-        while (iterator.hasNext()){
-            Trigger trigger = iterator.next();
+        for(Trigger trigger : triggers) {
             boolean found = false;
             String[] command = new String[]{null, null};
 

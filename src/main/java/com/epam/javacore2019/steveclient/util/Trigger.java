@@ -1,4 +1,4 @@
-package com.epam.javacore2019.util;
+package com.epam.javacore2019.steveclient.util;
 
 import java.util.Objects;
 

@@ -1,6 +1,6 @@
-package com.epam.javacore2019.command;
+package com.epam.javacore2019.steveserver.command;
 
-import com.epam.javacore2019.util.Trigger;
+import com.epam.javacore2019.steveclient.util.Trigger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,6 +44,7 @@ public class CommandWeather extends ACommand {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("Something with JSON, look closely");
         }
     }
 

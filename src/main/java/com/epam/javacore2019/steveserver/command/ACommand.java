@@ -1,6 +1,6 @@
-package com.epam.javacore2019.command;
+package com.epam.javacore2019.steveserver.command;
 
-import com.epam.javacore2019.util.Trigger;
+import com.epam.javacore2019.steveclient.util.Trigger;
 
 /**
  * Implementation of pattern "Command"
