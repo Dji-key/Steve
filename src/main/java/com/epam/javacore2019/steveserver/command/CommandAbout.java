@@ -1,6 +1,7 @@
 package com.epam.javacore2019.steveserver.command;
 
 import com.epam.javacore2019.steveclient.util.Trigger;
+import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +26,7 @@ public class CommandAbout extends ACommand {
      * Loads information from properties and prints out
      */
     @Override
-    public void execute(String param) {
+    public void execute(String param, HttpExchange httpExchange) {
 
         Properties properties = new Properties();
         String fileName = "application.properties";

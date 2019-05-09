@@ -1,5 +1,6 @@
 package com.epam.javacore2019.steveserver.handler;
 
+import com.epam.javacore2019.steveserver.command.CommandExecutor;
 import com.epam.javacore2019.steveserver.state.Context;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -9,8 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class HandlerCommand implements HttpHandler {
-
-    private Context context = Context.INSTANCE;
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
@@ -24,9 +23,7 @@ public class HandlerCommand implements HttpHandler {
             }
             commandRequest = builder.toString();
         }
-        httpExchange.sendResponseHeaders(200, 0);
-        httpExchange.close();
 
-        context.execute(commandRequest);
+        new CommandExecutor(commandRequest, httpExchange).start();
     }
 }

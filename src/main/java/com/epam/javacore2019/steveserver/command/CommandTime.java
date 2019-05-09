@@ -1,6 +1,7 @@
 package com.epam.javacore2019.steveserver.command;
 
 import com.epam.javacore2019.steveclient.util.Trigger;
+import com.sun.net.httpserver.HttpExchange;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,7 +23,7 @@ public class CommandTime extends ACommand {
     }
 
     @Override
-    public void execute(String param) {
+    public void execute(String param, HttpExchange httpExchange) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         SimpleDateFormat dateFormatAmPm = new SimpleDateFormat("h:mm:ss a");
         Calendar calendar = Calendar.getInstance();

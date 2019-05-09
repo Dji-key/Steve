@@ -1,5 +1,7 @@
 package com.epam.javacore2019.steveserver.state;
 
+import com.sun.net.httpserver.HttpExchange;
+
 public enum  Context {
     INSTANCE;
 
@@ -13,7 +15,7 @@ public enum  Context {
         this.state = state;
     }
 
-    public void execute(String commandRequest) {
-        state.execute(commandRequest, this);
+    public void execute(String commandRequest, HttpExchange httpExchange) {
+        state.execute(commandRequest, httpExchange, this);
     }
 }

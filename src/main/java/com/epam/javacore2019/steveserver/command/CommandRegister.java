@@ -1,7 +1,9 @@
 package com.epam.javacore2019.steveserver.command;
 
 import com.epam.javacore2019.steveclient.util.Trigger;
+import com.sun.net.httpserver.HttpExchange;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,16 +38,29 @@ public enum  CommandRegister {
      * invokes overridden method of {@link ACommand} if any, otherwise prints "No such command"
      * @param commandName get it from {@link com.epam.javacore2019.Application}
      */
-    public void execute(String commandName, String param) {
+    public void execute(String commandName, String param, HttpExchange httpExchange) {
         if (commandName == null) {
-            System.out.println("No such command");
+            try {
+                httpExchange.sendResponseHeaders(501, 0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            httpExchange.close();
             return;
         }
 
         if (REGISTER.containsKey(commandName)) {
-            REGISTER.get(commandName).execute(param);
+
+            REGISTER.get(commandName).execute(param, httpExchange);
+            httpExchange.close(); //<--------------- move to command
+
         } else {
-            System.out.println("No such command");
+            try {
+                httpExchange.sendResponseHeaders(501, 0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            httpExchange.close();
         }
     }
 }

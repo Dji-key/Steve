@@ -11,7 +11,7 @@ public class SteveClient implements Runnable {
 
     private Analyzer analyzer = new Analyzer();
     private Properties properties = new Properties();
-    private String commandUrl;
+    private String urlForSendingCommand;
 
     {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
@@ -19,7 +19,7 @@ public class SteveClient implements Runnable {
             properties.load(input);
             String port = properties.getProperty("steveServerPort");
             String host = properties.getProperty("host");
-            commandUrl = host + ":" + port + "/command";
+            urlForSendingCommand = host + ":" + port + "/command";
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -31,28 +31,15 @@ public class SteveClient implements Runnable {
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
 
-            String input;
-            while (!(input = reader.readLine()).equals("exit")) {
+            String inputFromConsole;
+            while (!(inputFromConsole = reader.readLine()).equals("exit")) {
 
-                String[] command = analyzer.getCommandArrayAfterAnalysis(input);
+                String commandAfterAnalysis = analyzer.getCommandArrayAfterAnalysis(inputFromConsole);
 
-                if (command != null) {
+                if (commandAfterAnalysis != null) {
 
-                    String output;
-                    if (command[1] != null) {
-                        output = command[0] + " " + command[1];
-                    } else {
-                        output = command[0];
-                    }
-                    URL commandRequest = new URL(commandUrl);
-                    HttpURLConnection connection = (HttpURLConnection)commandRequest.openConnection();
-                    connection.setRequestMethod("POST");
-                    connection.setDoOutput(true);
-                    DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-                    outputStream.writeBytes(output);
-                    outputStream.close();
+                    HttpURLConnection connection = getConnectionForCommand(commandAfterAnalysis, urlForSendingCommand);
                     connection.getResponseCode();
-                    connection.disconnect();
                 }
             }
 
@@ -60,5 +47,26 @@ public class SteveClient implements Runnable {
             e.printStackTrace();
         }
 
+    }
+
+    private HttpURLConnection getConnectionForCommand(String commandString, String urlForSendingCommand) {
+
+        HttpURLConnection connection = null;
+
+        try {
+
+            URL commandRequest = new URL(urlForSendingCommand);
+            connection = (HttpURLConnection) commandRequest.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+            outputStream.writeBytes(commandString);
+            outputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return connection;
     }
 }

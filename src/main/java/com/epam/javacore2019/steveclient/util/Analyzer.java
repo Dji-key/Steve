@@ -14,7 +14,7 @@ public class Analyzer {
     private Canvas canvas = new ConsoleCanvas(5, 5);
 
     private Properties properties = new Properties();
-    private String urlForAccessingTriggers = null;
+    private String urlForGettingTriggers = null;
     private Parser parser;
 
     {
@@ -23,16 +23,16 @@ public class Analyzer {
             properties.load(input);
             String port = properties.getProperty("steveServerPort");
             String host = properties.getProperty("host");
-            urlForAccessingTriggers = host + ":" + port + "/getTriggers";
+            urlForGettingTriggers = host + ":" + port + "/getTriggers";
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        parser = new Parser(Utils.getTriggersFromServer(urlForAccessingTriggers));
+        parser = new Parser(Utils.getTriggersFromServer(urlForGettingTriggers));
     }
 
-    public String[] getCommandArrayAfterAnalysis(String commandRequest) {
+    public String getCommandArrayAfterAnalysis(String commandRequest) {
 
         List<String[]> commandList = parser.parseString(commandRequest);
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -57,7 +57,7 @@ public class Analyzer {
                     switch (input) {
                         case "yes":
                         case "":
-                            return commandList.get(0);
+                            return commandList.get(0)[0] + (commandList.get(0)[1] == null ? "" : " " + commandList.get(0)[1]);
                         case "no":
                             return null;
                         default:
@@ -98,7 +98,7 @@ public class Analyzer {
                     }
 
                     try {
-                        return commandList.get(item - 1);
+                        return commandList.get(item - 1)[0] + (commandList.get(item - 1)[1] == null ? "" : " " + commandList.get(item - 1)[1]);
                     } catch (IndexOutOfBoundsException e) {
                         if (item == 0) {
                             return null;
