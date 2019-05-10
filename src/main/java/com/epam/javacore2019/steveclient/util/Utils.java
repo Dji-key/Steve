@@ -50,6 +50,15 @@ class Utils {
                         }
                     }
 
+                    String[] strictParams = null;
+                    if (!jsonOneTrigger.isNull("strictParams")) {
+                        JSONArray jsonStrictParams = jsonOneTrigger.getJSONArray("strictParams");
+                        strictParams = new String[jsonStrictParams.length()];
+                        for (int j = 0; j < strictParams.length; j++) {
+                            strictParams[j] = jsonStrictParams.getString(j);
+                        }
+                    }
+
                     String[] words = null;
                     if (!jsonOneTrigger.isNull("words")) {
                         JSONArray jsonWords = jsonOneTrigger.getJSONArray("words");
@@ -59,7 +68,7 @@ class Utils {
                         }
                     }
 
-                    triggers.add(new Trigger(key, params, words));
+                    triggers.add(new Trigger(key, params, strictParams, words));
                 }
             }
         } catch (JSONException e) {

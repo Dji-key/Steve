@@ -34,30 +34,41 @@ public class Analyzer {
 
     public String getCommandArrayAfterAnalysis(String commandRequest) {
 
-        List<String[]> commandList = parser.parseString(commandRequest);
+        List<List<String>> commandList = parser.parseString(commandRequest);
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         final String WRONG_INPUT_WARNING = "Wrong input";
 
         if (commandList == null) {
             canvas.printString("I don't understand");
         } else if (commandList.size() == 1) {
-            String output;
-            if (commandList.get(0)[1] == null) {
-                output = "Execute the command " + commandList.get(0)[0] + "?";
+
+            List<String> command = commandList.get(0);
+            StringBuilder outputString = new StringBuilder("Execute the command " + command.get(0));
+            if (command.size() == 1) {
+                outputString.append("?");
             } else {
-                output = "Execute the command " + commandList.get(0)[0] + " with parameter " + commandList.get(0)[1] + "?";
+                outputString.append(" with parameters: ").append(command.get(1));
+                int size = command.size();
+                for (int i = 2; i < size; i++) {
+                    outputString.append(" and ").append(command.get(i));
+                }
+                outputString.append("?");
             }
-            canvas.printString(output);
+            canvas.printString(outputString.toString());
 
             try {
 
+                StringBuilder commandAsString = new StringBuilder();
+                for (String string : command) {
+                    commandAsString.append(string).append(" ");
+                }
                 while (true) {
                     String input = reader.readLine().toLowerCase();
 
                     switch (input) {
                         case "yes":
                         case "":
-                            return commandList.get(0)[0] + (commandList.get(0)[1] == null ? "" : " " + commandList.get(0)[1]);
+                            return commandAsString.toString().trim();
                         case "no":
                             return null;
                         default:
@@ -70,16 +81,19 @@ public class Analyzer {
             }
 
         } else {
-            canvas.printString("I found several commands:");
-            int size = commandList.size();
-            for (int i = 0; i < size; i++) {
-                String output;
-                if (commandList.get(i)[1] == null) {
-                    output = (i + 1) + ") " + "Command " + commandList.get(i)[0];
-                } else {
-                    output = (i + 1) + ") " + "Command " + commandList.get(i)[0] + " with parameter " + commandList.get(i)[1];
+            canvas.printString("I have found several commands:");
+            int count = 1;
+            for (List command : commandList) {
+                StringBuilder outputString = new StringBuilder(count++ + ") Command ");
+                outputString.append(command.get(0));
+                if (command.size() > 1) {
+                    outputString.append(" with parameters: ").append(command.get(1));
+                    int size = command.size();
+                    for (int i = 2; i < size; i++) {
+                        outputString.append(" and ").append(command.get(i));
+                    }
                 }
-                canvas.printString(output);
+                canvas.printString(outputString.toString());
             }
             canvas.printString("0) Do nothing");
             canvas.printString("Enter which U want:");
@@ -98,7 +112,11 @@ public class Analyzer {
                     }
 
                     try {
-                        return commandList.get(item - 1)[0] + (commandList.get(item - 1)[1] == null ? "" : " " + commandList.get(item - 1)[1]);
+                        StringBuilder commandAsString = new StringBuilder();
+                        for (String string : commandList.get(item - 1)) {
+                            commandAsString.append(string).append(" ");
+                        }
+                        return commandAsString.toString().trim();
                     } catch (IndexOutOfBoundsException e) {
                         if (item == 0) {
                             return null;

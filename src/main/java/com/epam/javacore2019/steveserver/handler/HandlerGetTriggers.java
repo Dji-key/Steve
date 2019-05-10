@@ -1,7 +1,7 @@
 package com.epam.javacore2019.steveserver.handler;
 
-import com.epam.javacore2019.steveclient.util.Trigger;
 import com.epam.javacore2019.steveserver.command.CommandRegister;
+import com.epam.javacore2019.steveserver.command.Trigger;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.json.JSONArray;
@@ -24,6 +24,7 @@ public class HandlerGetTriggers implements HttpHandler {
                 triggerJSON.put("key", trigger.getKey());
                 triggerJSON.put("words", trigger.getWords());
                 triggerJSON.put("params", trigger.getParams());
+                triggerJSON.put("strictParams", trigger.getStrictParams());
                 jsonArray.put(triggerJSON);
             }
             jsonObject.put("triggers", jsonArray);

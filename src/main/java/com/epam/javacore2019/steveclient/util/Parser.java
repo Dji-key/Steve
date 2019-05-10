@@ -1,6 +1,7 @@
 package com.epam.javacore2019.steveclient.util;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -17,47 +18,59 @@ public class Parser {
      * @param commandRequest string from console
      * @return List of arrays of strings with found command and parameters.
      */
-     List<String[]> parseString(String commandRequest) {
-        String input = commandRequest.toLowerCase();
-        List<String[]> result = new ArrayList<>();
+     List<List<String>> parseString(String commandRequest) {
+        commandRequest = commandRequest.toLowerCase();
+        String[] separatedCommandRequest = commandRequest.split(" ");
+        List<List<String>> commandList = new ArrayList<>();
 
         for(Trigger trigger : triggers) {
             boolean found = false;
-            String[] command = new String[]{null, null};
+            List<String> command = new ArrayList<>();
 
-            if (input.contains(trigger.getKey())) {
+            if (commandRequest.contains(trigger.getKey())) {
                 found = true;
-                command[0] = trigger.getKey();
+                command.add(trigger.getKey());
             } else {
                 if (trigger.getWords() != null) {
                     for (String word : trigger.getWords()) {
-                        if (input.contains(word)) {
+                        if (commandRequest.contains(word)) {
                             found = true;
-                            command[0] = trigger.getKey();
+                            command.add(trigger.getKey());
                             break;
                         }
                     }
                 }
             }
 
-            if (found && trigger.getParams() != null) {
+            if (!found) {
+                continue;
+            }
+
+            if (trigger.getParams() != null) {
                 for (String param : trigger.getParams()) {
-                    if (input.contains(param)) {
-                        command[1] = param;
+                    if (commandRequest.contains(param)) {
+                        command.add(param);
                         break;
+                    }
+                }
+            } else if (trigger.getStrictParams() != null) {
+                for (String strictParam : trigger.getStrictParams()) {
+                    int length = separatedCommandRequest.length;
+                    for (int i = 0; i < length; i++) {
+                        if (strictParam.equals(separatedCommandRequest[i]) && i + 1 < length) {
+                            command.add(strictParam + " " + separatedCommandRequest[i + 1]);
+                        }
                     }
                 }
             }
 
-            if (command[0] != null) {
-                result.add(command);
-            }
+            commandList.add(command);
         }
 
-        if (result.size() == 0) {
+        if (commandList.size() == 0) {
             return null;
         } else {
-            return result;
+            return commandList;
         }
     }
 }

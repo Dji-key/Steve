@@ -1,6 +1,5 @@
 package com.epam.javacore2019.steveserver.command;
 
-import com.epam.javacore2019.steveclient.util.Trigger;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -12,7 +11,7 @@ import java.util.Properties;
  */
 public class CommandAbout extends ACommand {
 
-    private final Trigger TRIGGER = new Trigger("about", null, "father", "author");
+    private final Trigger TRIGGER = new Trigger("about", null, new String[] {"-c"}, "father", "author");
 
     CommandAbout() {
         description = "Information about program";

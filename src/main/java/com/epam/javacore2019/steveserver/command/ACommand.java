@@ -1,6 +1,5 @@
 package com.epam.javacore2019.steveserver.command;
 
-import com.epam.javacore2019.steveclient.util.Trigger;
 import com.sun.net.httpserver.HttpExchange;
 
 /**

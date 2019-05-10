@@ -1,6 +1,5 @@
 package com.epam.javacore2019.steveserver.command;
 
-import com.epam.javacore2019.steveclient.util.Trigger;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +12,7 @@ import java.util.Properties;
 
 public class CommandWeather extends ACommand {
 
-    private final Trigger TRIGGER = new Trigger("weather", new String[]{"yesterday", "today", "tomorrow"}, "temp", "temperature");
+    private final Trigger TRIGGER = new Trigger("weather", new String[]{"yesterday", "today", "tomorrow"}, null, "temp", "temperature");
 
     CommandWeather() {
         description = "Show temp of some day and my opinion";

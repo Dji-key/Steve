@@ -1,4 +1,4 @@
-package com.epam.javacore2019.steveclient.util;
+package com.epam.javacore2019.steveserver.command;
 
 import java.util.Objects;
 
@@ -19,11 +19,11 @@ public class Trigger {
         this.words = words;
     }
 
-    String getKey() {
+    public String getKey() {
         return key;
     }
 
-    String[] getWords() {
+    public String[] getWords() {
         if (words == null) {
             return null;
         } else {
@@ -31,7 +31,7 @@ public class Trigger {
         }
     }
 
-    String[] getParams() {
+    public String[] getParams() {
         if (params == null) {
             return null;
         } else {
@@ -39,7 +39,7 @@ public class Trigger {
         }
     }
 
-    String[] getStrictParams() {
+    public String[] getStrictParams() {
         if (strictParams == null) {
             return null;
         } else {

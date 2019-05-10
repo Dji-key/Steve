@@ -35,6 +35,7 @@ public class SteveClient implements Runnable {
             while (!(inputFromConsole = reader.readLine()).equals("exit")) {
 
                 String commandAfterAnalysis = analyzer.getCommandArrayAfterAnalysis(inputFromConsole);
+                System.out.println(commandAfterAnalysis);
 
                 if (commandAfterAnalysis != null) {
 
