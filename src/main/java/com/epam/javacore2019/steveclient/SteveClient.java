@@ -35,12 +35,13 @@ public class SteveClient implements Runnable {
             while (!(inputFromConsole = reader.readLine()).equals("exit")) {
 
                 String commandAfterAnalysis = analyzer.getCommandArrayAfterAnalysis(inputFromConsole);
-                System.out.println(commandAfterAnalysis);
 
                 if (commandAfterAnalysis != null) {
 
                     HttpURLConnection connection = getConnectionForCommand(commandAfterAnalysis, urlForSendingCommand);
                     connection.getResponseCode();
+                    BufferedReader reader1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    System.out.println(reader1.readLine());
                 }
             }
 

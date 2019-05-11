@@ -11,7 +11,7 @@ public class StateIdle implements AppState {
     public void execute(String commandRequest, HttpExchange httpExchange, Context context) {
         context.setState(new StateExecuting());
 
-        String[] command = commandRequest.split(" ");
+        String[] command = commandRequest.split(" ", 2);
 
         try {
             httpExchange.sendResponseHeaders(200, 0);
@@ -20,9 +20,10 @@ public class StateIdle implements AppState {
         }
 
         String commandName = command[0];
-        String commandParam = command.length == 2 ? command[1] : null;
+        String commandParams = command.length == 2 ? command[1] : null;
 
-        CommandRegister.INSTANCE.execute(commandName, commandParam, httpExchange);
+        CommandRegister.INSTANCE.execute(commandName, commandParams, httpExchange);
+        httpExchange.close();
 
         context.setState(this);
     }

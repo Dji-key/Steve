@@ -1,6 +1,8 @@
 package com.epam.javacore2019.steveserver.command;
 
 import com.sun.net.httpserver.HttpExchange;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,10 +13,10 @@ import java.util.Properties;
  */
 public class CommandAbout extends ACommand {
 
-    private final Trigger TRIGGER = new Trigger("about", null, new String[] {"-c"}, "father", "author");
+    private final Trigger TRIGGER = new Trigger("about", null, null, "father", "author");
 
     CommandAbout() {
-        description = "Information about program";
+        description = "Shows information about program";
     }
 
     @Override
@@ -25,7 +27,7 @@ public class CommandAbout extends ACommand {
      * Loads information from properties and prints out
      */
     @Override
-    public void execute(String param, HttpExchange httpExchange) {
+    public void execute(String params, HttpExchange httpExchange) {
 
         Properties properties = new Properties();
         String fileName = "application.properties";
@@ -33,7 +35,16 @@ public class CommandAbout extends ACommand {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(fileName)){
 
             properties.load(input);
-            System.out.println("Version: " + properties.getProperty("version") + "\nAuthor: " + properties.getProperty("author"));
+            String infoString = "Version: " + properties.getProperty("version") + "\nAuthor: " + properties.getProperty("author");
+
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("text", new JSONObject().put("string", infoString));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            httpExchange.getResponseBody().write(jsonObject.toString().getBytes());
 
         } catch (IOException e) {
             e.printStackTrace();

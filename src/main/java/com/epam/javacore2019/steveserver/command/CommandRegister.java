@@ -37,21 +37,19 @@ public enum  CommandRegister {
      * invokes overridden method of {@link ACommand} if any, otherwise prints "No such command"
      * @param commandName get it from {@link com.epam.javacore2019.Application}
      */
-    public void execute(String commandName, String param, HttpExchange httpExchange) {
+    public void execute(String commandName, String params, HttpExchange httpExchange) {
         if (commandName == null) {
             try {
                 httpExchange.sendResponseHeaders(501, 0);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            httpExchange.close();
             return;
         }
 
         if (REGISTER.containsKey(commandName)) {
 
-            REGISTER.get(commandName).execute(param, httpExchange);
-            httpExchange.close(); //<--------------- move to command
+            REGISTER.get(commandName).execute(params, httpExchange);
 
         } else {
             try {
@@ -59,7 +57,6 @@ public enum  CommandRegister {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            httpExchange.close();
         }
     }
 }

@@ -1,7 +1,10 @@
 package com.epam.javacore2019.steveserver.command;
 
 import com.sun.net.httpserver.HttpExchange;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -22,11 +25,17 @@ public class CommandTime extends ACommand {
     }
 
     @Override
-    public void execute(String param, HttpExchange httpExchange) {
+    public void execute(String params, HttpExchange httpExchange) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-        SimpleDateFormat dateFormatAmPm = new SimpleDateFormat("h:mm:ss a");
         Calendar calendar = Calendar.getInstance();
-        System.out.println(dateFormat.format(calendar.getTime()));
-        System.out.println(dateFormatAmPm.format(calendar.getTime()));
+
+        JSONObject jsonObject = new JSONObject();
+        String time = "Current time: " + dateFormat.format(calendar.getTime());
+        try {
+            jsonObject.put("text", new JSONObject().put("string", time));
+            httpExchange.getResponseBody().write(jsonObject.toString().getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

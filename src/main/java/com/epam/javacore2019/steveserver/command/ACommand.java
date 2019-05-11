@@ -11,7 +11,7 @@ public abstract class ACommand {
 
     public abstract Trigger getTrigger();
 
-    public void execute(String param, HttpExchange httpExchange) {
+    public void execute(String params, HttpExchange httpExchange) {
         System.out.println("Command " + getClass() + " not implemented");
     }
 }
