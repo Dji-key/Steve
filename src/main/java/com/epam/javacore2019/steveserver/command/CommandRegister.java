@@ -23,6 +23,9 @@ public enum  CommandRegister {
 
             CommandWeather weather = new CommandWeather();
             put(weather.getTrigger().getKey(), weather);
+
+            CommandNews news = new CommandNews();
+            put(news.getTrigger().getKey(), news);
         }
     };
 

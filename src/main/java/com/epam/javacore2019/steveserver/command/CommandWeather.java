@@ -1,5 +1,6 @@
 package com.epam.javacore2019.steveserver.command;
 
+import com.epam.javacore2019.steveserver.util.Utils;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,31 +29,32 @@ public class CommandWeather extends ACommand {
         Properties properties = new Properties();
         String fileName = "application.properties";
 
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream(fileName)){
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(fileName)) {
             properties.load(input);
 
-            long time = new Date().getTime()/1000;
-            int secIn24Hours = 24*60*60;
+            long time = new Date().getTime() / 1000;
+            int secIn24Hours = 24 * 60 * 60;
 
             if (params != null) {
                 switch (params) {
-                    case "yesterday" :
+                    case "yesterday":
                         time -= secIn24Hours;
                         break;
-                    case "tomorrow" :
+                    case "tomorrow":
                         time += secIn24Hours;
                         break;
-                    case "today" :
+                    case "today":
                     default:
                         break;
                 }
             }
 
-            String url = String.format(properties.getProperty("weatherSPb"), time);
-            JSONObject json = readJsonFromUrl(url);
+            String url = properties.getProperty("weatherSPbUrl").replace("{{param}}", String.valueOf(time));
+            //String url = String.format(properties.getProperty("weatherSPbUrl"), time);
+            JSONObject jsonObject = Utils.readJsonFromUrl(url);
 
-            double temperature = json.getJSONObject("currently").getDouble("temperature");
-            StringBuilder opinion = new StringBuilder("Temperature is ").append(temperature).append("degrees");
+            double temperature = jsonObject.getJSONObject("currently").getDouble("temperature");
+            StringBuilder opinion = new StringBuilder("Temperature is ").append(temperature).append(" degrees");
 
             if (temperature < -30) {
                 opinion.append(" and I'll die if I go out");
@@ -68,34 +70,12 @@ public class CommandWeather extends ACommand {
                 opinion.append(" and U should stay at home if U don't want melting");
             }
 
-            httpExchange.getResponseBody().write(opinion.toString().getBytes());
+            JSONObject outputJSONObject = new  JSONObject();
+            outputJSONObject.put("text", opinion);
+            httpExchange.getResponseBody().write(outputJSONObject.toString().getBytes());
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-
-        try (InputStream input = new URL(url).openStream()) {
-
-            //Charset.forName("UTF-8") ?
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-            String jsonText = readAll(reader);
-
-            return new JSONObject(jsonText);
-
-        }
-    }
-
-    private String readAll(BufferedReader reader) throws IOException {
-
-        StringBuilder builder = new StringBuilder();
-
-        while (reader.ready()) {
-            builder.append(reader.readLine());
-        }
-
-        return builder.toString();
     }
 }

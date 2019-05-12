@@ -4,15 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-class Utils {
+public class Utils {
 
     static List<Trigger> getTriggersFromServer(String url) {
 
@@ -76,6 +73,25 @@ class Utils {
         }
 
         return triggers;
+    }
+
+    public static JSONObject readJsonFromStream(InputStream inputStream) throws IOException, JSONException {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String jsonText = readAll(reader);
+
+        return new JSONObject(jsonText);
+    }
+
+    private static String readAll(BufferedReader reader) throws IOException {
+
+        StringBuilder builder = new StringBuilder();
+
+        while (reader.ready()) {
+            builder.append(reader.readLine());
+        }
+
+        return builder.toString();
     }
 
 }

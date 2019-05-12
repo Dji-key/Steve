@@ -29,11 +29,11 @@ public class CommandTime extends ACommand {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         Calendar calendar = Calendar.getInstance();
 
-        JSONObject jsonObject = new JSONObject();
+        JSONObject outputJSONObject = new JSONObject();
         String time = "Current time: " + dateFormat.format(calendar.getTime());
         try {
-            jsonObject.put("text", new JSONObject().put("string", time));
-            httpExchange.getResponseBody().write(jsonObject.toString().getBytes());
+            outputJSONObject.put("text", time);
+            httpExchange.getResponseBody().write(outputJSONObject.toString().getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }

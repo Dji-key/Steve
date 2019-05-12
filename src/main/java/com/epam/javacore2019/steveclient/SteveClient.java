@@ -1,5 +1,6 @@
 package com.epam.javacore2019.steveclient;
 
+import com.epam.javacore2019.steveclient.common.CommandResultHandler;
 import com.epam.javacore2019.steveclient.util.Analyzer;
 
 import java.io.*;
@@ -27,9 +28,9 @@ public class SteveClient implements Runnable {
     }
 
     @Override
-    public void run(){
+    public void run() {
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
 
             String inputFromConsole;
             while (!(inputFromConsole = reader.readLine()).equals("exit")) {
@@ -40,8 +41,9 @@ public class SteveClient implements Runnable {
 
                     HttpURLConnection connection = getConnectionForCommand(commandAfterAnalysis, urlForSendingCommand);
                     connection.getResponseCode();
-                    BufferedReader reader1 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    System.out.println(reader1.readLine());
+                    InputStream inputStreamCommandResult = connection.getInputStream();
+
+                    new CommandResultHandler(inputStreamCommandResult).start();
                 }
             }
 
@@ -61,9 +63,14 @@ public class SteveClient implements Runnable {
             connection = (HttpURLConnection) commandRequest.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
-            DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-            outputStream.writeBytes(commandString);
+
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(commandString.getBytes());
             outputStream.close();
+
+//            DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+//            outputStream.writeBytes(commandString);
+//            outputStream.close();
 
         } catch (IOException e) {
             e.printStackTrace();

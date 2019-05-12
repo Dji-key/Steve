@@ -39,7 +39,7 @@ public class CommandAbout extends ACommand {
 
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("text", new JSONObject().put("string", infoString));
+                jsonObject.put("text", infoString);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
