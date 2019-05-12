@@ -1,0 +1,11 @@
+{
+  "id" : "ID",
+  "firstName" : "First Name",
+  "lastName" : "Last Name",
+  "nickname" : "Nickname",
+  "criminalFamilyId" : "Criminal Family ID",
+  "dateOfBirth" : "Date of Birth",
+  "deceased" : "Deceased",
+  "dateOfDeath" : "Date of Death",
+  "numberOfCrimes" : "Number of Crimes"
+}
