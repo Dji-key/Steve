@@ -34,22 +34,26 @@ public class CommandNews extends ACommand{
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(fileName)) {
             properties.load(input);
 
-            String param = params.split(" ")[1];
+            String url = properties.getProperty("newsUrl");
 
-            String url = properties.getProperty("newsUrl").replace("{{param}}", param);
+            if (params != null) {
+                String param = params.split(" ")[1];
+                url = url.replace("{{param}}", "&category=" + param);
+            } else {
+                url = url.replace("{{param}}", "");
+            }
 
             JSONObject jsonObject = Utils.readJsonFromUrl(url);
             JSONArray jsonArrayOfArticles = jsonObject.getJSONArray("articles");
             int numberOfArticles = jsonArrayOfArticles.length();
-            int articlePointer = ThreadLocalRandom.current().nextInt(numberOfArticles + 1);
+            int articlePointer = ThreadLocalRandom.current().nextInt(numberOfArticles);
             JSONObject jsonArticle = jsonArrayOfArticles.getJSONObject(articlePointer);
 
             String title = jsonArticle.getString("title") + ".\n";
-            String source = "Источник: " + jsonArticle.getJSONObject("source").getString("name") + "\n";
-            String urlOfNews = "Ссылка: " + jsonArticle.getString("url");
+            String urlOfNews = "Источник: " + jsonArticle.getString("url");
 
             JSONObject outputJSONObject = new  JSONObject();
-            outputJSONObject.put("text", title + source + urlOfNews);
+            outputJSONObject.put("text", title + urlOfNews);
             httpExchange.getResponseBody().write(outputJSONObject.toString().getBytes());
 
         } catch (Exception e) {

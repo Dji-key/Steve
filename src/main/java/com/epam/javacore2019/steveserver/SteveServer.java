@@ -1,20 +1,11 @@
 package com.epam.javacore2019.steveserver;
 
-import com.epam.javacore2019.steveserver.command.CommandRegister;
-import com.epam.javacore2019.steveclient.util.Trigger;
 import com.epam.javacore2019.steveserver.handler.HandlerCommand;
 import com.epam.javacore2019.steveserver.handler.HandlerGetTriggers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.util.Properties;
 
