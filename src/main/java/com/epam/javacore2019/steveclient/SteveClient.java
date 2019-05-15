@@ -8,7 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Properties;
 
-public class SteveClient implements Runnable {
+public class SteveClient extends Thread {
 
     private Analyzer analyzer = new Analyzer();
     private Properties properties = new Properties();
@@ -40,10 +40,13 @@ public class SteveClient implements Runnable {
                 if (commandAfterAnalysis != null) {
 
                     HttpURLConnection connection = getConnectionForCommand(commandAfterAnalysis, urlForSendingCommand);
-                    connection.getResponseCode();
-                    InputStream inputStreamCommandResult = connection.getInputStream();
+                    int resultCode = connection.getResponseCode();
 
-                    new CommandResultHandler(inputStreamCommandResult).start();
+                    if (resultCode == HttpURLConnection.HTTP_OK) {
+                        new CommandResultHandler(connection).start();
+                    } else {
+                        System.out.println("Something went wrong: " + resultCode);
+                    }
                 }
             }
 
@@ -61,6 +64,7 @@ public class SteveClient implements Runnable {
 
             URL commandRequest = new URL(urlForSendingCommand);
             connection = (HttpURLConnection) commandRequest.openConnection();
+            connection.setRequestProperty("Content-Type", "text/cmd");
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
 

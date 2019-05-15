@@ -50,7 +50,6 @@ public class CommandWeather extends ACommand {
             }
 
             String url = properties.getProperty("weatherSPbUrl").replace("{{param}}", String.valueOf(time));
-            //String url = String.format(properties.getProperty("weatherSPbUrl"), time);
             JSONObject jsonObject = Utils.readJsonFromUrl(url);
 
             double temperature = jsonObject.getJSONObject("currently").getDouble("temperature");
@@ -70,9 +69,13 @@ public class CommandWeather extends ACommand {
                 opinion.append(" and U should stay at home if U don't want melting");
             }
 
-            JSONObject outputJSONObject = new  JSONObject();
-            outputJSONObject.put("text", opinion);
-            httpExchange.getResponseBody().write(outputJSONObject.toString().getBytes());
+//            JSONObject outputJSONObject = new  JSONObject();
+//            outputJSONObject.put("text", opinion);
+//            httpExchange.getResponseBody().write(outputJSONObject.toString().getBytes());
+
+            httpExchange.getResponseHeaders().set("Content", "text");
+            httpExchange.sendResponseHeaders(200, 0);
+            httpExchange.getResponseBody().write(opinion.toString().getBytes());
 
         } catch (Exception e) {
             e.printStackTrace();

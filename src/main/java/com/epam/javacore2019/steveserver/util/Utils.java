@@ -16,21 +16,35 @@ public class Utils {
         try (InputStream input = new URL(url).openStream()) {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-            String jsonText = readAll(reader);
+            StringBuilder builder = new StringBuilder();
+
+            while (reader.ready()) {
+                builder.append(reader.readLine());
+            }
+
+            String jsonText = builder.toString();
 
             return new JSONObject(jsonText);
         }
     }
 
-    private static String readAll(BufferedReader reader) throws IOException {
+//    private static String readAll(BufferedReader reader) throws IOException {
+//
+//        StringBuilder builder = new StringBuilder();
+//
+//        while (reader.ready()) {
+//            builder.append(reader.readLine());
+//        }
+//
+//        return builder.toString();
+//    }
 
-        StringBuilder builder = new StringBuilder();
+    public static String readStringFromStream(InputStream inputStream) throws IOException {
 
-        while (reader.ready()) {
-            builder.append(reader.readLine());
-        }
+        byte[] byteArray = new byte[inputStream.available()];
+        inputStream.read(byteArray);
 
-        return builder.toString();
+        return new String(byteArray);
     }
 
 }

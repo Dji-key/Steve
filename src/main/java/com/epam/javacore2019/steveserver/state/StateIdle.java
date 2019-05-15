@@ -13,12 +13,6 @@ public class StateIdle implements AppState {
 
         String[] command = commandRequest.split(" ", 2);
 
-        try {
-            httpExchange.sendResponseHeaders(200, 0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         String commandName = command[0];
         String commandParams = command.length == 2 ? command[1] : null;
 

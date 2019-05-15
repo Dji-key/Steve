@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Properties;
 
 /**
@@ -37,14 +38,19 @@ public class CommandAbout extends ACommand {
             properties.load(input);
             String infoString = "Version: " + properties.getProperty("version") + "\nAuthor: " + properties.getProperty("author");
 
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("text", infoString);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+//            JSONObject jsonObject = new JSONObject();
+//            try {
+//                jsonObject.put("text", infoString);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
 
-            httpExchange.getResponseBody().write(jsonObject.toString().getBytes());
+//            httpExchange.getResponseHeaders().put("Date", Arrays.asList(new String[] {"text/plain"}));
+            httpExchange.getResponseHeaders().set("Content", "text");
+            httpExchange.sendResponseHeaders(200, 0);
+
+//            httpExchange.getResponseBody().write(jsonObject.toString().getBytes());
+            httpExchange.getResponseBody().write(infoString.getBytes());
 
         } catch (IOException e) {
             e.printStackTrace();

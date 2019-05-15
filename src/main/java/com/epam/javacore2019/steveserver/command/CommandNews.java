@@ -49,12 +49,17 @@ public class CommandNews extends ACommand{
             int articlePointer = ThreadLocalRandom.current().nextInt(numberOfArticles);
             JSONObject jsonArticle = jsonArrayOfArticles.getJSONObject(articlePointer);
 
-            String title = jsonArticle.getString("title") + ".\n";
+            String title = jsonArticle.getString("title");
             String urlOfNews = "Источник: " + jsonArticle.getString("url");
 
-            JSONObject outputJSONObject = new  JSONObject();
-            outputJSONObject.put("text", title + urlOfNews);
-            httpExchange.getResponseBody().write(outputJSONObject.toString().getBytes());
+//            JSONObject outputJSONObject = new  JSONObject();
+//            outputJSONObject.put("text", title + urlOfNews);
+            String outputText = title + ".\n" + urlOfNews;
+
+            httpExchange.getResponseHeaders().set("Content", "text");
+            httpExchange.sendResponseHeaders(200, 0);
+//            httpExchange.getResponseBody().write(outputJSONObject.toString().getBytes());
+            httpExchange.getResponseBody().write(outputText.getBytes());
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -78,20 +78,34 @@ public class Utils {
     public static JSONObject readJsonFromStream(InputStream inputStream) throws IOException, JSONException {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        String jsonText = readAll(reader);
-
-        return new JSONObject(jsonText);
-    }
-
-    private static String readAll(BufferedReader reader) throws IOException {
-
         StringBuilder builder = new StringBuilder();
 
         while (reader.ready()) {
             builder.append(reader.readLine());
         }
+        String jsonText = builder.toString();
 
-        return builder.toString();
+        return new JSONObject(jsonText);
+    }
+
+//    public static String readAllFromStream(InputStream inputStream) throws IOException {
+//
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+//        StringBuilder builder = new StringBuilder();
+//
+//        while (reader.ready()) {
+//            builder.append(reader.readLine());
+//        }
+//
+//        return builder.toString();
+//    }
+
+    public static String readStringFromStream(InputStream inputStream) throws IOException {
+
+        byte[] byteArray = new byte[inputStream.available()];
+        inputStream.read(byteArray);
+
+        return new String(byteArray);
     }
 
 }
